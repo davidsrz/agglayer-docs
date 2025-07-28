@@ -4,7 +4,7 @@ copyright: Copyright &copy; PT Services DMCC 2025
 repo_name: Agglayer Documentation
 repo_url: https://github.com/agglayer/agglayer-docs
 edit_uri: edit/main/docs/
-site_url: https://agglayer.dev/
+site_url: https://davidsrz.github.io/agglayer-docs/
 
 theme:
   name: material
