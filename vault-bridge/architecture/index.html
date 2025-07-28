@@ -1,0 +1,3566 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Polygon Labs">
+      
+      
+        <link rel="canonical" href="https://davidsrz.github.io/agglayer-docs/vault-bridge/architecture/">
+      
+      
+        <link rel="prev" href="../business-roadmap/">
+      
+      
+        <link rel="next" href="../getting-started/">
+      
+      
+      <link rel="icon" href="../../img/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.15">
+    
+    
+      
+        <title>Architecture - Agglayer Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../_site_essentials/stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-PM6L5JWEZP"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-PM6L5JWEZP",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-PM6L5JWEZP",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>if("undefined"!=typeof __md_analytics){var consent=__md_get("__consent");consent&&consent.analytics&&__md_analytics()}</script>
+  
+
+    
+    
+    
+
+    <!-- Verification for Google search -->
+    <meta name="google-site-verification" content="sALqmNQZWZ6_5ig5JqIaFiR6AMUotcGG6xFq_fQPt_U" />
+    <!-- End of verification for Google search -->
+
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="#FF8E08">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#vault-bridge-architecture" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Agglayer Documentation" class="md-header__button md-logo" aria-label="Agglayer Documentation" data-md-component="logo">
+      
+  <img src="../../img/agglayer/agglayer-logo-mark-black-rgb.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Agglayer Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Architecture
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="#FF8E08"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="#FF8E08"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/davidsrz/agglayer-docs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_1864_3171)">
+<path d="M11.9985 0C5.37301 0 6.92471e-06 5.394 6.92471e-06 12.048C-0.00270001 14.5733 0.788278 17.0356 2.26115 19.0869C3.73403 21.1383 5.81432 22.6748 8.20801 23.4795C8.80801 23.5905 9.02701 23.2185 9.02701 22.899C9.02701 22.6125 9.01651 21.855 9.01051 20.85C5.67301 21.5775 4.96801 19.2345 4.96801 19.2345C4.42351 17.8425 3.63601 17.472 3.63601 17.472C2.54551 16.725 3.71701 16.74 3.71701 16.74C4.92151 16.8255 5.55451 17.982 5.55451 17.982C6.62551 19.8225 8.36401 19.2915 9.04801 18.9825C9.15601 18.204 9.46651 17.673 9.81001 17.3715C7.14601 17.067 4.34401 16.0335 4.34401 11.418C4.34401 10.1025 4.81201 9.027 5.58001 8.184C5.45551 7.8795 5.04451 6.654 5.69701 4.9965C5.69701 4.9965 6.70501 4.6725 8.99701 6.231C9.97613 5.96342 10.9865 5.82723 12.0015 5.826C13.0166 5.82802 14.0269 5.96471 15.006 6.2325C17.2965 4.674 18.303 4.998 18.303 4.998C18.957 6.657 18.546 7.881 18.423 8.1855C19.1925 9.0285 19.656 10.104 19.656 11.4195C19.656 16.047 16.851 17.0655 14.178 17.364C14.6085 17.736 14.9925 18.471 14.9925 19.5945C14.9925 21.2055 14.9775 22.5045 14.9775 22.899C14.9775 23.2215 15.1935 23.5965 15.8025 23.478C18.1939 22.6714 20.2716 21.1343 21.7424 19.0835C23.2132 17.0326 24.0029 14.5717 24 12.048C24 5.394 18.627 0 11.9985 0Z" fill="black"/>
+</g>
+<defs>
+<clipPath id="clip0_1864_3171">
+<rect width="24" height="24" fill="white"/>
+</clipPath>
+</defs>
+</svg>
+  </div>
+  <div class="md-source__repository">
+    Agglayer Documentation
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../.." class="md-tabs__link">
+          
+  
+  
+    
+  
+  Agglayer
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../cdk/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  CDK
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../overview/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Vault Bridge
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Agglayer Documentation" class="md-nav__button md-logo" aria-label="Agglayer Documentation" data-md-component="logo">
+      
+  <img src="../../img/agglayer/agglayer-logo-mark-black-rgb.svg" alt="logo">
+
+    </a>
+    Agglayer Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/davidsrz/agglayer-docs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_1864_3171)">
+<path d="M11.9985 0C5.37301 0 6.92471e-06 5.394 6.92471e-06 12.048C-0.00270001 14.5733 0.788278 17.0356 2.26115 19.0869C3.73403 21.1383 5.81432 22.6748 8.20801 23.4795C8.80801 23.5905 9.02701 23.2185 9.02701 22.899C9.02701 22.6125 9.01651 21.855 9.01051 20.85C5.67301 21.5775 4.96801 19.2345 4.96801 19.2345C4.42351 17.8425 3.63601 17.472 3.63601 17.472C2.54551 16.725 3.71701 16.74 3.71701 16.74C4.92151 16.8255 5.55451 17.982 5.55451 17.982C6.62551 19.8225 8.36401 19.2915 9.04801 18.9825C9.15601 18.204 9.46651 17.673 9.81001 17.3715C7.14601 17.067 4.34401 16.0335 4.34401 11.418C4.34401 10.1025 4.81201 9.027 5.58001 8.184C5.45551 7.8795 5.04451 6.654 5.69701 4.9965C5.69701 4.9965 6.70501 4.6725 8.99701 6.231C9.97613 5.96342 10.9865 5.82723 12.0015 5.826C13.0166 5.82802 14.0269 5.96471 15.006 6.2325C17.2965 4.674 18.303 4.998 18.303 4.998C18.957 6.657 18.546 7.881 18.423 8.1855C19.1925 9.0285 19.656 10.104 19.656 11.4195C19.656 16.047 16.851 17.0655 14.178 17.364C14.6085 17.736 14.9925 18.471 14.9925 19.5945C14.9925 21.2055 14.9775 22.5045 14.9775 22.899C14.9775 23.2215 15.1935 23.5965 15.8025 23.478C18.1939 22.6714 20.2716 21.1343 21.7424 19.0835C23.2132 17.0326 24.0029 14.5717 24 12.048C24 5.394 18.627 0 11.9985 0Z" fill="black"/>
+</g>
+<defs>
+<clipPath id="clip0_1864_3171">
+<rect width="24" height="24" fill="white"/>
+</clipPath>
+</defs>
+</svg>
+  </div>
+  <div class="md-source__repository">
+    Agglayer Documentation
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../.." class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Agglayer
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_1" id="__nav_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            Agglayer
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../agglayer/get-started/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Get Started
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_1_2" id="__nav_1_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_2">
+            <span class="md-nav__icon md-icon"></span>
+            Get Started
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agglayer/get-started/bridge-assets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Set up your environment
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../agglayer/how-to/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    How To
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_1_3" id="__nav_1_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_3">
+            <span class="md-nav__icon md-icon"></span>
+            How To
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agglayer/how-to/transfer-asset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Bridge an ERC-20 token
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agglayer/how-to/call-contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Call a smart contract cross-chain
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agglayer/how-to/transfer-and-call/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Bridge-and-call in one step
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../agglayer/core-concepts/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Core Concepts
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_1_4" id="__nav_1_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_4">
+            <span class="md-nav__icon md-icon"></span>
+            Core Concepts
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agglayer/core-concepts/architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Architecture
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agglayer/core-concepts/unified-bridge/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Unified Bridge
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agglayer/core-concepts/pessimistic-proof/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Pessimistic Proof
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agglayer/core-concepts/state-transition-proof/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    State Transition Proof
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../agglayer/additional-resources/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    Additional Resources
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_1_5" id="__nav_1_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_5">
+            <span class="md-nav__icon md-icon"></span>
+            Additional Resources
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agglayer/additional-resources/connected-chains/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Connected Chains
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/BrianSeong99/Agglayer_PessimisticProof_Benchmark/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Deep Dive: Pessimistic Proof ↗
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/BrianSeong99/AggLayer_UnifiedBridge/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Deep Dive: Unified Bridge ↗
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/BrianSeong99/Agglayer_StateTransitionProof?tab=readme-ov-file#state-transition-proof" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Deep Dive: State Transition Proof ↗
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../cdk/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    CDK
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            CDK
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Get Started
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Get Started
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cdk/get-started/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    What is CDK?
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cdk/get-started/benefits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Why choose CDK?
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    cdk-opgeth
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            cdk-opgeth
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cdk/cdk-opgeth/local-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Deploy a local testnet
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cdk/cdk-opgeth/devnet-deployment-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Deploy a devnet
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cdk/cdk-opgeth/architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Architecture
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    cdk-erigon
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            cdk-erigon
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cdk/cdk-erigon/local-deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Deploy a local testnet
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cdk/cdk-erigon/use-native-token/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Create a native token
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cdk/cdk-erigon/architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Architecture
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4_4" id="__nav_2_4_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Migration Guides
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            Migration Guides
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cdk/cdk-erigon/migrate/fork/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    General Guide
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cdk/cdk-erigon/migrate/forkid-9-12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Fork ID 9 to 12
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cdk/cdk-erigon/migrate/forkid-7-to-9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Fork ID 7 to 9
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Additional Resources
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_5">
+            <span class="md-nav__icon md-icon"></span>
+            Additional Resources
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cdk/additional-resources/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Glossary
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cdk/additional-resources/faqs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    FAQs
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    Vault Bridge
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Vault Bridge
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../business-roadmap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Business and Roadmap
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Architecture
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Architecture
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#high-level-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      High-Level Architecture
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      Core Components
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Core Components">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-vault-bridge-token-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Vault Bridge Token Contract
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Vault Bridge Token Contract">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#interfaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      Interfaces
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key Functions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsibilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      Responsibilities
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-migration-manager" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Migration Manager
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Migration Manager">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#architecture-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      Architecture Pattern
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-responsibilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key Responsibilities
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#implementation-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      Implementation Details
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-native-converter" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Native Converter
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Native Converter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#operational-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      Operational Model
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key Features
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#liquidity-guarantees" class="md-nav__link">
+    <span class="md-ellipsis">
+      Liquidity Guarantees
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-custom-token" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Custom Token
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Custom Token">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#use-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      Use Cases
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#implementation-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      Implementation Pattern
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Integration Patterns
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Integration Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#standard-erc-4626-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Standard ERC-4626 Integration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bridge-integrated-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Bridge-Integrated Operations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#native-converter-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Native Converter Integration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#yield-generation-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      Yield Generation System
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Yield Generation System">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#external-vault-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      External Vault Integration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#risk-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Risk Management
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Risk Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#strategy-curation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Strategy Curation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#risk-mitigation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Risk Mitigation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cross-chain-communication" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cross-Chain Communication
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cross-Chain Communication">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#agglayer-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Agglayer Integration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Agglayer Integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#message-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      Message Types
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#security-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      Security Model
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#non-agglayer-chains" class="md-nav__link">
+    <span class="md-ellipsis">
+      Non-Agglayer Chains
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Non-Agglayer Chains">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#integration-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Integration Requirements
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#planned-enhancements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Planned Enhancements
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deployment-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deployment Architecture
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deployment Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multi-chain-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multi-Chain Deployment
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#contract-relationships" class="md-nav__link">
+    <span class="md-ellipsis">
+      Contract Relationships
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Contract Relationships">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#inheritance-hierarchy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Inheritance Hierarchy
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependency-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dependency Management
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-and-scalability" class="md-nav__link">
+    <span class="md-ellipsis">
+      Performance and Scalability
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance and Scalability">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gas-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Gas Optimization
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Gas Optimization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#batch-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Batch Operations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#layer-2-benefits" class="md-nav__link">
+    <span class="md-ellipsis">
+      Layer 2 Benefits
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scalability-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scalability Considerations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Scalability Considerations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multi-asset-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multi-Asset Support
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#network-effects" class="md-nav__link">
+    <span class="md-ellipsis">
+      Network Effects
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Getting Started
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contracts-index/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Contracts
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integration-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Integration Guide
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    API Reference
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    FAQs
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#high-level-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      High-Level Architecture
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      Core Components
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Core Components">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-vault-bridge-token-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Vault Bridge Token Contract
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Vault Bridge Token Contract">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#interfaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      Interfaces
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key Functions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responsibilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      Responsibilities
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-migration-manager" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Migration Manager
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Migration Manager">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#architecture-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      Architecture Pattern
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-responsibilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key Responsibilities
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#implementation-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      Implementation Details
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-native-converter" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Native Converter
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Native Converter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#operational-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      Operational Model
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key Features
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#liquidity-guarantees" class="md-nav__link">
+    <span class="md-ellipsis">
+      Liquidity Guarantees
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-custom-token" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Custom Token
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Custom Token">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#use-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      Use Cases
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#implementation-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      Implementation Pattern
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Integration Patterns
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Integration Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#standard-erc-4626-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Standard ERC-4626 Integration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bridge-integrated-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Bridge-Integrated Operations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#native-converter-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Native Converter Integration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#yield-generation-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      Yield Generation System
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Yield Generation System">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#external-vault-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      External Vault Integration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#risk-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Risk Management
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Risk Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#strategy-curation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Strategy Curation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#risk-mitigation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Risk Mitigation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cross-chain-communication" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cross-Chain Communication
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cross-Chain Communication">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#agglayer-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Agglayer Integration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Agglayer Integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#message-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      Message Types
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#security-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      Security Model
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#non-agglayer-chains" class="md-nav__link">
+    <span class="md-ellipsis">
+      Non-Agglayer Chains
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Non-Agglayer Chains">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#integration-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Integration Requirements
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#planned-enhancements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Planned Enhancements
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deployment-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deployment Architecture
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deployment Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multi-chain-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multi-Chain Deployment
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#contract-relationships" class="md-nav__link">
+    <span class="md-ellipsis">
+      Contract Relationships
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Contract Relationships">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#inheritance-hierarchy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Inheritance Hierarchy
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependency-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dependency Management
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-and-scalability" class="md-nav__link">
+    <span class="md-ellipsis">
+      Performance and Scalability
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance and Scalability">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gas-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Gas Optimization
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Gas Optimization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#batch-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Batch Operations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#layer-2-benefits" class="md-nav__link">
+    <span class="md-ellipsis">
+      Layer 2 Benefits
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scalability-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scalability Considerations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Scalability Considerations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multi-asset-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multi-Asset Support
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#network-effects" class="md-nav__link">
+    <span class="md-ellipsis">
+      Network Effects
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/davidsrz/agglayer-docs/edit/main/docs/vault-bridge/architecture.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="vault-bridge-architecture">Vault Bridge Architecture<a class="headerlink" href="#vault-bridge-architecture" title="Link to this section">&para;</a></h1>
+<p>This document provides a comprehensive technical overview of the Vault Bridge protocol architecture, including its core components, interaction patterns, and integration points with the Agglayer ecosystem.</p>
+<h2 id="high-level-architecture">High-Level Architecture<a class="headerlink" href="#high-level-architecture" title="Link to this section">&para;</a></h2>
+<p>Vault Bridge operates across two chain types:
+- <strong>Layer X (Primary Chain)</strong>: Where assets are deposited and yield is generated
+- <strong>Layer Y (Secondary Chain)</strong>: Where vbTokens are used and DeFi interactions occur</p>
+<pre class="mermaid"><code>graph TB
+    subgraph "Layer X (Primary Chain)"
+        VBT[Vault Bridge Token Contract]
+        YV[Yield Vault ERC-4626]
+        MM[Migration Manager]
+        VBT --&gt; YV
+        MM --&gt; VBT
+    end
+
+    subgraph "Layer Y (Secondary Chain)"
+        NC[Native Converter]
+        CT[Custom Token]
+        DEFI[DeFi Protocols]
+        NC --&gt; DEFI
+        CT --&gt; DEFI
+    end
+
+    subgraph "Agglayer Bridge"
+        UB[Unified Bridge]
+        VBT &lt;--&gt; UB
+        NC &lt;--&gt; UB
+    end
+
+    subgraph "External Systems"
+        MORPHO[Morpho Vaults]
+        GAUNTLET[Gauntlet Risk Management]
+        STEAKHOUSE[Steakhouse Financial]
+        YV --&gt; MORPHO
+        GAUNTLET --&gt; YV
+        STEAKHOUSE --&gt; YV
+    end</code></pre>
+<h2 id="core-components">Core Components<a class="headerlink" href="#core-components" title="Link to this section">&para;</a></h2>
+<h3 id="1-vault-bridge-token-contract">1. Vault Bridge Token Contract<a class="headerlink" href="#1-vault-bridge-token-contract" title="Link to this section">&para;</a></h3>
+<p>The Vault Bridge Token is the core component that implements multiple interfaces:</p>
+<h4 id="interfaces">Interfaces<a class="headerlink" href="#interfaces" title="Link to this section">&para;</a></h4>
+<ul>
+<li><strong>ERC-20</strong>: Standard token functionality for vbTokens</li>
+<li><strong>ERC-4626</strong>: Vault standard for deposit/withdraw operations</li>
+<li><strong>Unified Bridge Extension</strong>: Integration with Agglayer&rsquo;s bridge system</li>
+</ul>
+<h4 id="key-functions">Key Functions<a class="headerlink" href="#key-functions" title="Link to this section">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="c1">// Core ERC-4626 functions</span>
+<span class="kt">function</span><span class="w"> </span><span class="nv">deposit</span><span class="p">(</span><span class="kt">uint256</span><span class="w"> </span><span class="nv">assets</span><span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">receiver</span><span class="p">)</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint256</span><span class="w"> </span><span class="nv">shares</span><span class="p">);</span>
+<span class="kt">function</span><span class="w"> </span><span class="nv">withdraw</span><span class="p">(</span><span class="kt">uint256</span><span class="w"> </span><span class="nv">assets</span><span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">receiver</span><span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">owner</span><span class="p">)</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">returns</span><span class="w"> </span><span class="p">(</span><span class="kt">uint256</span><span class="w"> </span><span class="nv">shares</span><span class="p">);</span>
+
+<span class="c1">// Bridge integration functions  </span>
+<span class="kt">function</span><span class="w"> </span><span class="nv">depositAndBridge</span><span class="p">(</span><span class="kt">uint256</span><span class="w"> </span><span class="nv">assets</span><span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">receiver</span><span class="p">,</span><span class="w"> </span><span class="kt">uint32</span><span class="w"> </span><span class="nv">destinationNetwork</span><span class="p">)</span><span class="w"> </span><span class="kt">external</span><span class="p">;</span>
+<span class="kt">function</span><span class="w"> </span><span class="nv">claimAndRedeem</span><span class="p">(</span><span class="kt">uint256</span><span class="w"> </span><span class="nv">shares</span><span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">receiver</span><span class="p">,</span><span class="w"> </span><span class="kt">address</span><span class="w"> </span><span class="nv">owner</span><span class="p">)</span><span class="w"> </span><span class="kt">external</span><span class="p">;</span>
+</code></pre></div>
+<h4 id="responsibilities">Responsibilities<a class="headerlink" href="#responsibilities" title="Link to this section">&para;</a></h4>
+<ul>
+<li><strong>Asset Management</strong>: Handles deposits and withdrawals of underlying assets</li>
+<li><strong>vbToken Minting</strong>: Mints and burns vbTokens in 1:1 ratio with underlying assets</li>
+<li><strong>Yield Integration</strong>: Deposits assets into external yield-generating vaults</li>
+<li><strong>Bridge Operations</strong>: Facilitates cross-chain vbToken transfers</li>
+<li><strong>Migration Support</strong>: Accepts migrated assets from Layer Y via Migration Manager</li>
+</ul>
+<h3 id="2-migration-manager">2. Migration Manager<a class="headerlink" href="#2-migration-manager" title="Link to this section">&para;</a></h3>
+<p>The Migration Manager coordinates the movement of backing assets from Layer Y to Layer X.</p>
+<h4 id="architecture-pattern">Architecture Pattern<a class="headerlink" href="#architecture-pattern" title="Link to this section">&para;</a></h4>
+<pre class="mermaid"><code>graph LR
+    NC[Native Converter L2] --&gt; MM[Migration Manager L1]
+    MM --&gt; VBT[Vault Bridge Token L1]
+    VBT --&gt; YV[Yield Vault]</code></pre>
+<h4 id="key-responsibilities">Key Responsibilities<a class="headerlink" href="#key-responsibilities" title="Link to this section">&para;</a></h4>
+<ul>
+<li><strong>Migration Coordination</strong>: Manages asset transfers from Native Converters to Vault Bridge Tokens</li>
+<li><strong>Cross-Chain Synchronization</strong>: Ensures proper accounting across chains</li>
+<li><strong>Security Validation</strong>: Verifies migration authenticity and prevents double-spending</li>
+<li><strong>Batch Processing</strong>: Optimizes gas costs through batched migration operations</li>
+</ul>
+<h4 id="implementation-details">Implementation Details<a class="headerlink" href="#implementation-details" title="Link to this section">&para;</a></h4>
+<ul>
+<li>Shared across all vbTokens (single Migration Manager per deployment)</li>
+<li>Integrates with Agglayer&rsquo;s cross-chain messaging system</li>
+<li>Implements rate limiting and validation mechanisms</li>
+<li>Maintains migration audit trail for transparency</li>
+</ul>
+<h3 id="3-native-converter">3. Native Converter<a class="headerlink" href="#3-native-converter" title="Link to this section">&para;</a></h3>
+<p>The Native Converter enables direct vbToken creation on Layer Y without bridging from Layer X.</p>
+<h4 id="operational-model">Operational Model<a class="headerlink" href="#operational-model" title="Link to this section">&para;</a></h4>
+<pre class="mermaid"><code>graph TD
+    UA[User Assets] --&gt; NC[Native Converter]
+    NC --&gt; VBT_L2[vbToken on L2]
+    NC --&gt; MM[Migration to L1]
+    MM --&gt; VBT_L1[Vault Bridge Token L1]
+    VBT_L1 --&gt; YV[Yield Generation]</code></pre>
+<h4 id="key-features">Key Features<a class="headerlink" href="#key-features" title="Link to this section">&para;</a></h4>
+<ul>
+<li><strong>Direct Conversion</strong>: Convert bridged underlying assets to vbTokens 1:1 on Layer Y</li>
+<li><strong>Liquidity Management</strong>: Maintains liquidity reserves for deconversion operations</li>
+<li><strong>Migration Support</strong>: Batches backing assets for migration to Layer X</li>
+<li><strong>Bridge Integration</strong>: Functions as Unified Bridge extension</li>
+</ul>
+<h4 id="liquidity-guarantees">Liquidity Guarantees<a class="headerlink" href="#liquidity-guarantees" title="Link to this section">&para;</a></h4>
+<ul>
+<li><strong>Guaranteed Liquidity</strong>: Deconversion guaranteed up to specific percentage of deposits</li>
+<li><strong>Migration Triggers</strong>: Automated migration when liquidity thresholds are reached</li>
+<li><strong>Reserve Management</strong>: Dynamic liquidity management based on usage patterns</li>
+</ul>
+<h3 id="4-custom-token">4. Custom Token<a class="headerlink" href="#4-custom-token" title="Link to this section">&para;</a></h3>
+<p>Custom Tokens provide enhanced functionality for vbTokens on Layer Y.</p>
+<h4 id="use-cases">Use Cases<a class="headerlink" href="#use-cases" title="Link to this section">&para;</a></h4>
+<ul>
+<li><strong>Enhanced Interfaces</strong>: Add specialized interfaces (e.g., WETH9 compatibility for vbETH)</li>
+<li><strong>Custom Logic</strong>: Implement chain-specific behaviors and optimizations  </li>
+<li><strong>Protocol Integration</strong>: Seamless integration with existing Layer Y protocols</li>
+<li><strong>Upgrade Mechanism</strong>: Provide migration path from basic vbTokens to enhanced versions</li>
+</ul>
+<h4 id="implementation-pattern">Implementation Pattern<a class="headerlink" href="#implementation-pattern" title="Link to this section">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">contract</span><span class="w"> </span><span class="ni">CustomVBETH</span><span class="w"> </span><span class="kt">is</span><span class="w"> </span>ERC20<span class="p">,</span><span class="w"> </span>IWETH9<span class="w"> </span><span class="p">{</span>
+<span class="w">    </span>IERC20<span class="w"> </span><span class="kt">public</span><span class="w"> </span>immutable<span class="w"> </span>vbETH<span class="p">;</span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">deposit</span><span class="p">()</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="kt">payable</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Convert ETH to vbETH via Native Converter</span>
+<span class="w">        </span><span class="c1">// Issue Custom Token 1:1</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">function</span><span class="w"> </span><span class="nv">withdraw</span><span class="p">(</span><span class="kt">uint256</span><span class="w"> </span><span class="nv">amount</span><span class="p">)</span><span class="w"> </span><span class="kt">external</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Burn Custom Token</span>
+<span class="w">        </span><span class="c1">// Convert vbETH back to ETH</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="integration-patterns">Integration Patterns<a class="headerlink" href="#integration-patterns" title="Link to this section">&para;</a></h2>
+<h3 id="standard-erc-4626-integration">Standard ERC-4626 Integration<a class="headerlink" href="#standard-erc-4626-integration" title="Link to this section">&para;</a></h3>
+<p>For applications already supporting ERC-4626 vaults:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Simple integration example</span>
+IERC4626<span class="w"> </span>vaultBridgeToken<span class="w"> </span><span class="o">=</span><span class="w"> </span>IERC4626<span class="p">(</span>vbTokenAddress<span class="p">);</span>
+
+<span class="c1">// Deposit assets and receive vbTokens</span>
+<span class="kt">uint256</span><span class="w"> </span><span class="nv">shares</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>vaultBridgeToken<span class="p">.</span>deposit<span class="p">(</span>assets<span class="p">,</span><span class="w"> </span>receiver<span class="p">);</span>
+
+<span class="c1">// Later: withdraw assets by burning vbTokens  </span>
+<span class="kt">uint256</span><span class="w"> </span><span class="nv">assets</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>vaultBridgeToken<span class="p">.</span>redeem<span class="p">(</span>shares<span class="p">,</span><span class="w"> </span>receiver<span class="p">,</span><span class="w"> </span>owner<span class="p">);</span>
+</code></pre></div>
+<h3 id="bridge-integrated-operations">Bridge-Integrated Operations<a class="headerlink" href="#bridge-integrated-operations" title="Link to this section">&para;</a></h3>
+<p>For cross-chain operations using Vault Bridge&rsquo;s bridge extensions:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Deposit and bridge in single transaction</span>
+IVaultBridgeToken<span class="p">(</span>vbTokenAddress<span class="p">).</span>depositAndBridge<span class="p">(</span>
+<span class="w">    </span>assets<span class="p">,</span>
+<span class="w">    </span>receiver<span class="p">,</span><span class="w"> </span>
+<span class="w">    </span>destinationNetwork
+<span class="p">);</span>
+
+<span class="c1">// Claim on destination chain and redeem assets</span>
+IVaultBridgeToken<span class="p">(</span>vbTokenAddress<span class="p">).</span>claimAndRedeem<span class="p">(</span>
+<span class="w">    </span>shares<span class="p">,</span>
+<span class="w">    </span>receiver<span class="p">,</span>
+<span class="w">    </span>owner
+<span class="p">);</span>
+</code></pre></div>
+<h3 id="native-converter-integration">Native Converter Integration<a class="headerlink" href="#native-converter-integration" title="Link to this section">&para;</a></h3>
+<p>For applications on Layer Y wanting to work with vbTokens:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Convert bridged assets to vbTokens on Layer Y</span>
+INativeConverter<span class="p">(</span>nativeConverterAddress<span class="p">).</span>convert<span class="p">(</span>
+<span class="w">    </span>underlyingAssets<span class="p">,</span>
+<span class="w">    </span>receiver
+<span class="p">);</span>
+
+<span class="c1">// Deconvert back to underlying assets</span>
+INativeConverter<span class="p">(</span>nativeConverterAddress<span class="p">).</span>deconvert<span class="p">(</span>
+<span class="w">    </span>vbTokenAmount<span class="p">,</span>
+<span class="w">    </span>receiver
+<span class="p">);</span>
+</code></pre></div>
+<h2 id="yield-generation-system">Yield Generation System<a class="headerlink" href="#yield-generation-system" title="Link to this section">&para;</a></h2>
+<h3 id="external-vault-integration">External Vault Integration<a class="headerlink" href="#external-vault-integration" title="Link to this section">&para;</a></h3>
+<p>Vault Bridge integrates with external ERC-4626 compatible vaults for yield generation:</p>
+<pre class="mermaid"><code>graph TB
+    VBT[Vault Bridge Token] --&gt; MORPHO[Morpho Vault]
+    MORPHO --&gt; LENDING[Lending Markets]
+    MORPHO --&gt; STAKING[Staking Protocols]
+    MORPHO --&gt; YIELD[Other Yield Sources]
+
+    GAUNTLET[Gauntlet] --&gt; RISK[Risk Assessment]
+    STEAKHOUSE[Steakhouse] --&gt; STRATEGY[Strategy Selection]
+    RISK --&gt; VBT
+    STRATEGY --&gt; VBT</code></pre>
+<h3 id="risk-management">Risk Management<a class="headerlink" href="#risk-management" title="Link to this section">&para;</a></h3>
+<h4 id="strategy-curation">Strategy Curation<a class="headerlink" href="#strategy-curation" title="Link to this section">&para;</a></h4>
+<ul>
+<li><strong>Gauntlet</strong>: Provides quantitative risk analysis and parameter recommendations</li>
+<li><strong>Steakhouse Financial</strong>: Offers institutional-grade risk management and strategy curation</li>
+<li><strong>Dynamic Weighting</strong>: Strategy allocations based on chain-specific risk profiles</li>
+</ul>
+<h4 id="risk-mitigation">Risk Mitigation<a class="headerlink" href="#risk-mitigation" title="Link to this section">&para;</a></h4>
+<ul>
+<li><strong>Diversification</strong>: Spread assets across multiple yield strategies</li>
+<li><strong>Monitoring</strong>: Continuous monitoring of vault performance and security</li>
+<li><strong>Emergency Procedures</strong>: Circuit breakers and emergency withdrawal mechanisms</li>
+<li><strong>Insurance Integration</strong>: Optional integration with DeFi insurance protocols</li>
+</ul>
+<h2 id="cross-chain-communication">Cross-Chain Communication<a class="headerlink" href="#cross-chain-communication" title="Link to this section">&para;</a></h2>
+<h3 id="agglayer-integration">Agglayer Integration<a class="headerlink" href="#agglayer-integration" title="Link to this section">&para;</a></h3>
+<p>Vault Bridge leverages Agglayer&rsquo;s Unified Bridge for secure cross-chain operations:</p>
+<h4 id="message-types">Message Types<a class="headerlink" href="#message-types" title="Link to this section">&para;</a></h4>
+<ul>
+<li><strong>Asset Bridging</strong>: Standard token transfers with vbToken minting/burning</li>
+<li><strong>Migration Messages</strong>: Backing asset movement from Layer Y to Layer X</li>
+<li><strong>Yield Distribution</strong>: Revenue sharing information and payments</li>
+<li><strong>Configuration Updates</strong>: Cross-chain parameter synchronization</li>
+</ul>
+<h4 id="security-model">Security Model<a class="headerlink" href="#security-model" title="Link to this section">&para;</a></h4>
+<ul>
+<li><strong>ZK Proofs</strong>: Agglayer&rsquo;s zero-knowledge proof system validates all cross-chain operations</li>
+<li><strong>Pessimistic Proofs</strong>: Backup security mechanism for additional validation</li>
+<li><strong>Fraud Proofs</strong>: Challenge mechanism for disputed operations</li>
+<li><strong>Finality Guarantees</strong>: Cross-chain operation finality aligned with L1 finality</li>
+</ul>
+<h3 id="non-agglayer-chains">Non-Agglayer Chains<a class="headerlink" href="#non-agglayer-chains" title="Link to this section">&para;</a></h3>
+<p>For chains not connected to Agglayer:</p>
+<h4 id="integration-requirements">Integration Requirements<a class="headerlink" href="#integration-requirements" title="Link to this section">&para;</a></h4>
+<ul>
+<li><strong>Third-Party Bridges</strong>: Integration with external bridge providers</li>
+<li><strong>Limited Functionality</strong>: Reduced Native Converter support</li>
+<li><strong>Revenue Fees</strong>: Protocol fees apply for revenue sharing</li>
+<li><strong>Manual Coordination</strong>: Some operations may require manual intervention</li>
+</ul>
+<h4 id="planned-enhancements">Planned Enhancements<a class="headerlink" href="#planned-enhancements" title="Link to this section">&para;</a></h4>
+<ul>
+<li><strong>Universal Adapters</strong>: Generic adapters for popular bridge protocols</li>
+<li><strong>Automated Migration</strong>: Improved automation for non-Agglayer chains</li>
+<li><strong>Enhanced Security</strong>: Additional validation for external bridge operations</li>
+</ul>
+<h2 id="deployment-architecture">Deployment Architecture<a class="headerlink" href="#deployment-architecture" title="Link to this section">&para;</a></h2>
+<h3 id="multi-chain-deployment">Multi-Chain Deployment<a class="headerlink" href="#multi-chain-deployment" title="Link to this section">&para;</a></h3>
+<pre class="mermaid"><code>graph TB
+    subgraph "Ethereum (Layer X)"
+        VBT_ETH[Vault Bridge Tokens]
+        MM_ETH[Migration Manager]
+        YV_ETH[Yield Vaults]
+    end
+
+    subgraph "Polygon zkEVM (Layer Y)"
+        NC_ZKEVM[Native Converters]
+        CT_ZKEVM[Custom Tokens]
+    end
+
+    subgraph "Arbitrum (Layer Y)"
+        NC_ARB[Native Converters]
+        CT_ARB[Custom Tokens]
+    end
+
+    subgraph "Optimism (Layer Y)"
+        NC_OP[Native Converters]  
+        CT_OP[Custom Tokens]
+    end
+
+    AGGLAYER[Agglayer Bridge] --&gt; VBT_ETH
+    AGGLAYER --&gt; NC_ZKEVM
+    AGGLAYER --&gt; NC_ARB
+    AGGLAYER --&gt; NC_OP</code></pre>
+<h3 id="contract-relationships">Contract Relationships<a class="headerlink" href="#contract-relationships" title="Link to this section">&para;</a></h3>
+<h4 id="inheritance-hierarchy">Inheritance Hierarchy<a class="headerlink" href="#inheritance-hierarchy" title="Link to this section">&para;</a></h4>
+<ul>
+<li><strong>VaultBridgeToken</strong>: Inherits from ERC20, ERC4626, UnifiedBridgeExtension</li>
+<li><strong>NativeConverter</strong>: Inherits from ERC20, UnifiedBridgeExtension  </li>
+<li><strong>CustomToken</strong>: Inherits from ERC20, often implements additional interfaces</li>
+<li><strong>MigrationManager</strong>: Standalone contract with VaultBridgeToken integration</li>
+</ul>
+<h4 id="dependency-management">Dependency Management<a class="headerlink" href="#dependency-management" title="Link to this section">&para;</a></h4>
+<ul>
+<li><strong>Upgradeable Contracts</strong>: Use proxy patterns for upgradeability where needed</li>
+<li><strong>Immutable Core</strong>: Critical logic in immutable contracts for security</li>
+<li><strong>Modular Design</strong>: Components can be independently upgraded or replaced</li>
+<li><strong>Interface Stability</strong>: Stable interfaces to support ecosystem integration</li>
+</ul>
+<h2 id="performance-and-scalability">Performance and Scalability<a class="headerlink" href="#performance-and-scalability" title="Link to this section">&para;</a></h2>
+<h3 id="gas-optimization">Gas Optimization<a class="headerlink" href="#gas-optimization" title="Link to this section">&para;</a></h3>
+<h4 id="batch-operations">Batch Operations<a class="headerlink" href="#batch-operations" title="Link to this section">&para;</a></h4>
+<ul>
+<li><strong>Migration Batching</strong>: Multiple migrations processed in single transaction</li>
+<li><strong>Yield Distribution</strong>: Bulk distribution to reduce per-chain costs</li>
+<li><strong>State Updates</strong>: Optimized storage patterns to minimize gas costs</li>
+</ul>
+<h4 id="layer-2-benefits">Layer 2 Benefits<a class="headerlink" href="#layer-2-benefits" title="Link to this section">&para;</a></h4>
+<ul>
+<li><strong>Lower Costs</strong>: Reduced transaction costs on Layer Y operations</li>
+<li><strong>Higher Throughput</strong>: More transactions per second for user operations</li>
+<li><strong>Better UX</strong>: Faster confirmation times for interactive operations</li>
+</ul>
+<h3 id="scalability-considerations">Scalability Considerations<a class="headerlink" href="#scalability-considerations" title="Link to this section">&para;</a></h3>
+<h4 id="multi-asset-support">Multi-Asset Support<a class="headerlink" href="#multi-asset-support" title="Link to this section">&para;</a></h4>
+<ul>
+<li><strong>Template Contracts</strong>: Reusable contract templates for new assets</li>
+<li><strong>Shared Infrastructure</strong>: Common components across all vbTokens</li>
+<li><strong>Automated Deployment</strong>: Streamlined process for adding new assets</li>
+</ul>
+<h4 id="network-effects">Network Effects<a class="headerlink" href="#network-effects" title="Link to this section">&para;</a></h4>
+<ul>
+<li><strong>Liquidity Aggregation</strong>: Combined liquidity across all participating chains</li>
+<li><strong>Yield Optimization</strong>: Better rates through larger asset pools</li>
+<li><strong>Cross-Chain Arbitrage</strong>: Opportunities for yield optimization across chains</li>
+</ul>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../business-roadmap/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Business and Roadmap">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Business and Roadmap
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../getting-started/" class="md-footer__link md-footer__link--next" aria-label="Next: Getting Started">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Getting Started
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; PT Services DMCC 2025
+    </div>
+  
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://support.polygon.technology/support/solutions" target="_blank" rel="noopener" title="support.polygon.technology" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512m-86.2-346.7c7.9-22.3 29.1-37.3 52.8-37.3h58.3c34.9 0 63.1 28.3 63.1 63.1 0 22.6-12.1 43.5-31.7 54.8L280 264.4c-.2 13-10.9 23.6-24 23.6-13.3 0-24-10.7-24-24v-13.5c0-8.6 4.6-16.5 12.1-20.8l44.3-25.4c4.7-2.7 7.6-7.7 7.6-13.1 0-8.4-6.8-15.1-15.1-15.1h-58.3c-3.4 0-6.4 2.1-7.5 5.3l-.4 1.2c-4.4 12.5-18.2 19-30.6 14.6s-19-18.2-14.6-30.6l.4-1.2zM224 352a32 32 0 1 1 64 0 32 32 0 1 1-64 0"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://agglayer.dev/" target="_blank" rel="noopener" title="agglayer.dev" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M352 256c0 22.2-1.2 43.6-3.3 64H163.4c-2.2-20.4-3.3-41.8-3.3-64s1.2-43.6 3.3-64h185.3c2.2 20.4 3.3 41.8 3.3 64m28.8-64h123.1c5.3 20.5 8.1 41.9 8.1 64s-2.8 43.5-8.1 64H380.8c2.1-20.6 3.2-42 3.2-64s-1.1-43.4-3.2-64m112.6-32H376.7c-10-63.9-29.8-117.4-55.3-151.6 78.3 20.7 142 77.5 171.9 151.6zm-149.1 0H167.7c6.1-36.4 15.5-68.6 27-94.7 10.5-23.6 22.2-40.7 33.5-51.5C239.4 3.2 248.7 0 256 0s16.6 3.2 27.8 13.8c11.3 10.8 23 27.9 33.5 51.5 11.6 26 20.9 58.2 27 94.7m-209 0H18.6c30-74.1 93.6-130.9 172-151.6-25.5 34.2-45.3 87.7-55.3 151.6M8.1 192h123.1c-2.1 20.6-3.2 42-3.2 64s1.1 43.4 3.2 64H8.1C2.8 299.5 0 278.1 0 256s2.8-43.5 8.1-64m186.6 254.6c-11.6-26-20.9-58.2-27-94.6h176.6c-6.1 36.4-15.5 68.6-27 94.6-10.5 23.6-22.2 40.7-33.5 51.5-11.2 10.7-20.5 13.9-27.8 13.9s-16.6-3.2-27.8-13.8c-11.3-10.8-23-27.9-33.5-51.5zM135.3 352c10 63.9 29.8 117.4 55.3 151.6-78.4-20.7-142-77.5-172-151.6zm358.1 0c-30 74.1-93.6 130.9-171.9 151.6 25.5-34.2 45.2-87.7 55.3-151.6h116.7z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/agglayer/agglayer-docs" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+      <div class="md-consent" data-md-component="consent" id="__consent" hidden>
+        <div class="md-consent__overlay"></div>
+        <aside class="md-consent__inner">
+          <form class="md-consent__form md-grid md-typeset" name="consent">
+            
+
+
+  
+
+
+<h4>Cookie consent</h4>
+<p>We use cookies to recognize your repeated visits and preferences, as well as to measure the effectiveness of our documentation and whether users find what they're searching for. With your consent, you're helping us to make our documentation better.</p>
+<input class="md-toggle" type="checkbox" id="__settings" >
+<div class="md-consent__settings">
+  <ul class="task-list">
+    
+    
+      
+        
+  
+  
+    
+    
+  
+  <li class="task-list-item">
+    <label class="task-list-control">
+      <input type="checkbox" name="analytics" checked>
+      <span class="task-list-indicator"></span>
+      Google Analytics
+    </label>
+  </li>
+
+      
+    
+    
+      
+        
+  
+  
+    
+    
+  
+  <li class="task-list-item">
+    <label class="task-list-control">
+      <input type="checkbox" name="github" checked>
+      <span class="task-list-indicator"></span>
+      GitHub
+    </label>
+  </li>
+
+      
+    
+    
+  </ul>
+</div>
+<div class="md-consent__controls">
+  
+    
+      <button class="md-button md-button--primary">Accept</button>
+    
+    
+    
+  
+    
+    
+    
+      <label class="md-button" for="__settings">Manage settings</label>
+    
+  
+</div>
+          </form>
+        </aside>
+      </div>
+      <script>var consent=__md_get("__consent");if(consent)for(var input of document.forms.consent.elements)input.name&&(input.checked=consent[input.name]||!1);else"file:"!==location.protocol&&setTimeout((function(){document.querySelector("[data-md-component=consent]").hidden=!1}),250);var form=document.forms.consent;for(var action of["submit","reset"])form.addEventListener(action,(function(e){if(e.preventDefault(),"reset"===e.type)for(var n of document.forms.consent.elements)n.name&&(n.checked=!1);__md_set("__consent",Object.fromEntries(Array.from(new FormData(form).keys()).map((function(e){return[e,!0]})))),location.hash="",location.reload()}))</script>
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["search.suggest", "search.highlight", "search.share", "navigation.tracking", "navigation.integration", "navigation.tabs", "navigation.tabs.sticky", "navigation.indexes", "navigation.sections", "navigation.path", "navigation.top", "navigation.footer", "toc.follow", "content.code.copy", "content.action.edit", "navigation.indexes"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+  
+      <script src="../../assets/javascripts/bundle.56ea9cef.min.js"></script>
+      
+        <script src="../../_site_essentials/js/mathjax.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?version=4.8.0"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/contrib/auto-render.min.js"></script>
+      
+        <script src="../../js/open_in_new_tab.js"></script>
+      
+    
+  
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MQWH3L28"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    
+
+  </body>
+</html>
